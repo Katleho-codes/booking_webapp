@@ -15,8 +15,10 @@ const addEntry = async (req, res) => {
     // Validate request body
     // await addEntrySchema.validate(req.body);
     const {
+      customerId,
       firstname,
       lastname,
+      businessname,
       email,
       phoneNumber,
       phoneNumber2,
@@ -30,9 +32,13 @@ const addEntry = async (req, res) => {
     } = req.body;
     let fullname = `${firstname} ${lastname}`;
     const newEntry = await pool.query(
-      "INSERT INTO tickets (customer_fullname, customer_email, customer_phone, phone_number_2, created_at,customer_address,customer_address_2,customer_city,customer_state,customer_zip, custom_uuid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning unique_id",
+      "INSERT INTO tickets (customer_id, customer_fullname, customer_firstname, customer_lastname, business_name, customer_email, customer_phone, phone_number_2, created_at,customer_address,customer_address_2,customer_city,customer_state,customer_zip, custom_uuid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) returning unique_id",
       [
+        customerId,
         fullname,
+        firstname,
+        lastname,
+        businessname,
         email,
         phoneNumber,
         phoneNumber2,
@@ -48,8 +54,6 @@ const addEntry = async (req, res) => {
     res.status(200).json(newEntry.rows);
   } catch (error) {
     console.log("Create entry error", error);
-    console.error("Validation error:", error.errors);
-    res.status(400).json({ message: "Validation error", errors: error.errors });
   }
 };
 export default addEntry;
