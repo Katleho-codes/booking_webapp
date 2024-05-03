@@ -165,6 +165,8 @@ CREATE TABLE tickets(
     unique_id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     ticket_id BIGSERIAL,
     customer_fullname VARCHAR(50),
+    customer_firstname text,
+    customer_lastname text,
     customer_email VARCHAR(50),
     customer_phone VARCHAR(50),
     customer_address text,
@@ -193,7 +195,6 @@ CREATE TABLE tickets(
     special_requirement text,
     business_name text,
     phone_number_2 text,
+    customer_id text,
     custom_uuid uuid
 );
-ALTER TABLE tickets
-ADD COLUMN department text;
