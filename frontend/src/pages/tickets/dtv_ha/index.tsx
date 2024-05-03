@@ -30,7 +30,7 @@ function ServiceOrderDTVHA() {
 
     const [createSOModalVisible, setCreateSOModalVisble] = useState<boolean | null | any>()
 
-    const handleRowClick = (row) => {
+    const handleRowClick = (row: any) => {
         setCreateSOModalVisble(row?.original);
     };
 

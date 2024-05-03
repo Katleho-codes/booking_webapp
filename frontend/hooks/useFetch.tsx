@@ -17,7 +17,7 @@ export const useFetchTickets = () => {
                     setGetAllTicketsDTV(filteredDTVHA);
                 })
                 .catch((e) => {
-                    console.log(e);
+                    // console.log(e);
                     setGetAllTicketsError(e.data)
                 })
 

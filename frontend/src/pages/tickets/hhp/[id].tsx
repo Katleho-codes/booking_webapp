@@ -58,11 +58,11 @@ function EditHHPTicket() {
         const values = { getServiceOrderNumber }
         try {
             const response = await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_LINK}/${id}`, values); // Replace with your API endpoint
-            console.log('Updated data:', response.data);
+            // console.log('Updated data:', response.data);
             // Optionally, you can update the state with the response data to reflect the changes
-            console.log("patch data", response.data);
+            // console.log("patch data", response.data);
         } catch (error) {
-            console.error('Error updating data:', error);
+            // console.error('Error updating data:', error);
         }
     }
 
@@ -163,7 +163,7 @@ function EditHHPTicket() {
 
         })
             .catch(function (error: any) {
-                console.log(error)
+                // console.log(error)
             });
 
     }

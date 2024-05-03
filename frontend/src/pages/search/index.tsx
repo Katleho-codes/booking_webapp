@@ -61,7 +61,7 @@ function SearchCustomer() {
                     setZip(data?.customers[0]?.zip);
                 }
             } catch (error) {
-                console.log("search repair customer error", error)
+                // console.log("search repair customer error", error)
             }
 
         }
@@ -78,7 +78,7 @@ function SearchCustomer() {
             // console.log('Data created successfully:', response.data);
             return response.data; // Optionally return the updated data
         } catch (error) {
-            console.error('Error creating data:', error);
+            // console.error('Error creating data:', error);
             throw error; // Re-throw the error to handle it in the calling code
         }
     }
@@ -103,7 +103,7 @@ function SearchCustomer() {
         const custInfoString = JSON.stringify(custInfo);
         if (typeof window !== "undefined" && window.localStorage) {
             window.localStorage.setItem("custInfo", custInfoString);
-            console.log('Dummy object stored successfully!');
+            // console.log('Dummy object stored successfully!');
             createEntry();
             router.push("/device_inspection")
         }

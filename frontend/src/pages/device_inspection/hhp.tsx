@@ -63,7 +63,7 @@ function HHP() {
         const loadCustomerInfo = () => {
             if (typeof window !== undefined && window.localStorage) {
                 const parsedData = JSON.parse(localStorage.getItem('custInfo') || '""');
-                console.log(parsedData)
+                // console.log(parsedData)
                 if (parsedData !== null) {
 
                     setStoredData(parsedData); // Set the parsed object to st
@@ -136,10 +136,10 @@ function HHP() {
         // console.log(values)
         try {
             const response = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_LINK}/${customUUID}`, values);
-            console.log('Data updated successfully:', response.data);
+            // console.log('Data updated successfully:', response.data);
             return response.data; // Optionally return the updated data
         } catch (error) {
-            console.error('Error updating data:', error);
+            // console.error('Error updating data:', error);
             // throw error; // Re-throw the error to handle it in the calling code
         }
 

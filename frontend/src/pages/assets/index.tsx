@@ -93,7 +93,7 @@ export default function Assets() {
         const assetInfoString = JSON.stringify(assetInfo);
         if (typeof window !== "undefined" && window.localStorage) {
             window.localStorage.setItem("assetInfo", assetInfoString);
-            console.log('Dummy object stored successfully!');
+            // console.log('Dummy object stored successfully!');
             // router.push("/device_inspection")
         }
     }
