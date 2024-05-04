@@ -37,3 +37,4 @@ yarn-error.log*
 next-env.d.ts
 .env
 frontend/.next/cache/webpack/client-production/2.pack
+frontend/.next/trace
