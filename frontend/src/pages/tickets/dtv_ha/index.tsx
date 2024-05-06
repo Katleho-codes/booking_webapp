@@ -112,7 +112,7 @@ function ServiceOrderDTVHA() {
                     <div>
                         <button
                             type="button"
-                            onClick={handleButtonClick}
+                            onClick={() => router.push("/prompts")}
                             className="inline-flex w-full rounded-md border outline-none border-gray-300 shadow-sm px-4 py-2 bg-[#273e47] hover:bg-[#273e47bd] active:bg-[#273e47bd] focus:bg-[#273e47bd] text-sm font-medium text-white"
                         >
                             Create ticket
