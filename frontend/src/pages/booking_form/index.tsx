@@ -121,7 +121,7 @@ function CustomerDetails() {
             "state": state,
             "zip": zip,
         }
-        console.log(values)
+        // console.log(values)
         try {
             const { data } = await axios.post(`${process.env.NEXT_PUBLIC_REPAIRSHOPR_API_SUBDOMAIN}/customers`, values, {
                 method: 'POST',
@@ -145,14 +145,15 @@ function CustomerDetails() {
             createEntry(customerId);
             if (typeof window !== "undefined" && window.localStorage) {
                 window.localStorage.setItem("custInfo", custInfoString);
-                console.log('Dummy object stored successfully!');
+                // console.log('Dummy object stored successfully!');
 
-                router.push("/device_inspection")
+                // router.push("/device_inspection")
+                router.push("/assets")
             }
 
 
         } catch (error: any) {
-            console.log(error)
+            // console.log(error)
         }
 
 

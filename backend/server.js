@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(helmet());
 app.use(
   cors({
-    origin: ["http://localhost:3005"],
+    origin: ["http://localhost:3005", "http://127.0.0.1:5500"],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })

@@ -1,17 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { datetimestamp } from '../../../utils/datetime';
+import Container from '@/components/Container';
+import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import moment from 'moment';
-import Modal from '@/components/Modals';
-import toast from "react-hot-toast";
-import { useRouter } from 'next/router';
 import Link from 'next/link';
-import Accordion from '@/components/Accordion';
-import Container from '@/components/Container';
-import { provinces } from '../../../utils/provinces';
-import { faultOccurences } from '../../../utils/fault_occurences';
-import { ArrowLongRightIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import toast from "react-hot-toast";
 import { assetTypesDTV } from '../../../utils/asset_types';
+import { datetimestamp } from '../../../utils/datetime';
+import { faultOccurences } from '../../../utils/fault_occurences';
 
 function DTVHA() {
 
@@ -51,6 +48,9 @@ function DTVHA() {
 
     const router = useRouter()
 
+    // Asset id
+    const [assetId, setAssetId] = useState('')
+
 
 
     useEffect(() => {
@@ -77,6 +77,23 @@ function DTVHA() {
     }, [])
 
     useEffect(() => {
+        const loadCustomerAssetInfo = () => {
+            if (typeof window !== undefined && window.localStorage) {
+                const parsedData = JSON.parse(localStorage.getItem('assetInfo') || '""');
+                // console.log(parsedData)
+                if (parsedData !== null) {
+                    setAssetId(parsedData?.asset_id)
+                    setSerialNumber(parsedData?.asset_serial)
+                    setModelNumber(parsedData?.model_number)
+
+                }
+            }
+        };
+        loadCustomerAssetInfo()
+    }, [])
+
+
+    useEffect(() => {
         const getCustomerId = async () => {
             try {
                 const { data } = await axios.get(`${process.env.NEXT_PUBLIC_REPAIRSHOPR_API_SUBDOMAIN}/customers?query=${email}`, {
@@ -101,7 +118,7 @@ function DTVHA() {
 
 
 
-    const updateEntry = async ({ ticketNumber }: any) => {
+    const updateEntry = async (ticketNumber: any, originalTicketId: any, customerId: any) => {
         const updatedAt = datetimestamp;
         const isBackUpNeedCheckboxEnabled = false; // ONLY HANDHELD DEVICES need backup 
         const IMEI = ""; // ONLY HANDHELD DEVICES HAVE AN IMEI
@@ -121,6 +138,9 @@ function DTVHA() {
             phoneNumber,
             address, address2, city, state, zip,
             department,
+            originalTicketId,
+            customerId,
+            assetId,
             customUUID,
         }
         // console.log(values)
@@ -211,7 +231,8 @@ function DTVHA() {
                 "Backup Requires": `${backupCode}`,
                 "Warranty ": `${warrantyCode}`,
                 "Special Requirement ": `${specialRequirement}`,
-            }
+            },
+            "asset_ids": assetId
         }
         // console.log(values)
         await axios.post(`${process.env.NEXT_PUBLIC_REPAIRSHOPR_API_SUBDOMAIN}/tickets`, values, {
@@ -221,8 +242,11 @@ function DTVHA() {
             }
         })
             .then((res) => {
-                let ticketNumber = res?.data?.ticket?.number
-                updateEntry({ ticketNumber });
+                console.log("result from ticket", res)
+                let ticketNumber = res?.data?.ticket?.number;
+                let originalTicketId = res?.data?.ticket?.id;
+                let customerId = res?.data?.ticket?.customer_id;
+                updateEntry(ticketNumber, originalTicketId, customerId);
                 alert(`Ticket created, Here is your ticket: ${res.data?.ticket?.number}`);
                 if (typeof window !== 'undefined' && window.localStorage) localStorage.clear();
                 router.push("/")

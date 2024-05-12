@@ -25,7 +25,7 @@ function HHP() {
     const [faultOccurence, setFaultOccurence] = useState("")
     const [customerId, setCustomerId] = useState<any>("")
     const [assetType, setAssetType] = useState("")
-    const [assetTypeFocus, setAssetTypeFocus] = useState(false)
+
 
     const [storedData, setStoredData] = useState({})
 
@@ -40,20 +40,21 @@ function HHP() {
 
 
     const [IMEI, setIMEI] = useState("");
-    const [imeiScanOpen, setImeiScanOpen] = useState(false)
-
     const [serialNumber, setSerialNumber] = useState("")
-    const [serialNumberScanOpen, setserialNumberScanOpen] = useState(false)
-
     const [modelNumber, setModelNumber] = useState("")
-    const [modelScanOpen, setModelScanOpen] = useState(false)
     const [warranty, setWarranty] = useState("");
 
     const [readTerms, setReadTerms] = useState(false);
-
-    const [isOpen, setIsOpen] = useState(false);
     const router = useRouter()
 
+
+    // Asset id
+    const [assetId, setAssetId] = useState('')
+
+    const toggleTermsCheckbox = () => {
+        setReadTerms(prev => !prev);
+        if (!readTerms) window.open("https://terms.mmallonthemove.co.za", "_blank")
+    }
     const toggleBackupNeededCheckbox = () => {
         setIsBackUpNeedCheckboxEnabled(prev => !prev);
         if (!isBackUpNeedCheckboxEnabled) window.open("https://terms.mmallonthemove.co.za/backup_terms", "_blank")
@@ -80,6 +81,21 @@ function HHP() {
             }
         };
         loadCustomerInfo()
+    }, [])
+    useEffect(() => {
+        const loadCustomerAssetInfo = () => {
+            if (typeof window !== undefined && window.localStorage) {
+                const parsedData = JSON.parse(localStorage.getItem('assetInfo') || '""');
+                // console.log(parsedData)
+                if (parsedData !== null) {
+                    setAssetId(parsedData?.asset_id)
+                    setSerialNumber(parsedData?.asset_serial)
+                    setModelNumber(parsedData?.model_number)
+
+                }
+            }
+        };
+        loadCustomerAssetInfo()
     }, [])
 
     useEffect(() => {
@@ -113,7 +129,7 @@ function HHP() {
     }, [isBackUpNeedCheckboxEnabled])
 
 
-    const updateEntry = async ({ ticketNumber }: string | number | any) => {
+    const updateEntry = async (ticketNumber: any, originalTicketId: any, customerId: any) => {
         const updatedAt = datetimestamp;
         const department = "HHP"
         const values = {
@@ -131,6 +147,9 @@ function HHP() {
             phoneNumber,
             address, address2, city, state, zip,
             department,
+            originalTicketId,
+            customerId,
+            assetId,
             customUUID,
         }
         // console.log(values)
@@ -224,7 +243,8 @@ function HHP() {
                 "IMEI": `${IMEI}`,
                 "Special Requirement ": `${specialRequirement}`,
                 "Password": `${password}`
-            }
+            },
+            "asset_ids": assetId
         }
         // console.log(values)
         await axios.post(`${process.env.NEXT_PUBLIC_REPAIRSHOPR_API_SUBDOMAIN}/tickets`, values, {
@@ -235,29 +255,21 @@ function HHP() {
         })
             .then((res) => {
                 let ticketNumber = res?.data?.ticket?.number
-                updateEntry({ ticketNumber });
+                let originalTicketId = res?.data?.ticket?.id;
+                let customerId = res?.data?.ticket?.customer_id;
+                updateEntry(ticketNumber, originalTicketId, customerId);
                 alert(`Ticket created, Here is your ticket: ${res.data?.ticket?.number}`);
                 if (typeof window !== 'undefined' && window.localStorage) localStorage.clear();
                 router.push("/")
             }).catch((error: any) => {
                 toast.error(`${error.response.data.error}`);
-                console.log(error.response.data.error);
+                // console.log(error.response.data.error);
             })
 
 
 
     }
 
-    // const openTermsAndConditions = async () => {
-    //     await WebBrowser.openBrowserAsync(`${process.env.EXPO_PUBLIC_TERMS_LINK}`,);
-    // }
-    // const openBackupTermsAndConditions = async () => {
-    //     await WebBrowser.openBrowserAsync(`${process.env.EXPO_PUBLIC_BACKUP_TERMS_LINK}`);
-    // }
-    // const toggleBackupNeededCheckbox = () => {
-    //     setIsBackUpNeedCheckboxEnabled(prev => !prev);
-    //     if (!isBackUpNeedCheckboxEnabled) openBackupTermsAndConditions()
-    // }
     return (
         <Container>
 
@@ -273,9 +285,6 @@ function HHP() {
                         <select
                             value={faultOccurence}
                             onChange={(e) => setFaultOccurence(e.target.value)}
-                            // required
-                            // aria-required
-
                             name='faultOccurence'
                             id="faultOccurence"
                             className="cursor-pointer bg-white outline-none border border-gray-300 outline-0 text-gray-900  font-semibold text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
@@ -296,39 +305,36 @@ function HHP() {
                         <label htmlFor='password' className='sr-only'>Password or pin</label>
                         <input type="text" name='password' id='password' placeholder='Password or pin' value={password} onChange={(e) => setPassword(e.target.value)} className=" bg-white border border-gray-300 outline-0 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
                     </div>
-                    <div className="mb-4">
-                        <Link href="https://terms.mmallonthemove.co.za" rel="noopener noreferrer" target="_blank" className='text-center flex justify-center p-2.5 font-medium text-blue-600 dark:text-blue-500 hover:underline'> Read our terms </Link>
+                    <div className='mb-4'>
+                        <div className='flex gap-1'>
+                            <input
+                                type="checkbox"
+                                checked={readTerms}
+                                onChange={toggleTermsCheckbox}
+                                id='readTerms'
+                                name='readTerms'
+                            />
+                            <label htmlFor='readTerms' className='ms-2 text-sm font-medium text-gray-900'>
+                                I agree with the terms I have read
+                            </label>
 
+                        </div>
+                        <div className='flex gap-1'>
+                            <input
+                                type="checkbox"
+                                checked={isBackUpNeedCheckboxEnabled}
+                                onChange={toggleBackupNeededCheckbox}
+                                id='isBackUpNeedCheckboxEnabled'
+                                name='isBackUpNeedCheckboxEnabled'
+                            />
+                            <label htmlFor='isBackUpNeedCheckboxEnabled' className='ms-2 text-sm font-medium text-gray-900'>
+                                Does your device require backup?(If no, leave unchecked)
+                            </label>
+
+                        </div>
                     </div>
                 </div>
-                <div className='my-3'>
-                    <div className='flex gap-1'>
-                        <input
-                            type="checkbox"
-                            checked={readTerms}
-                            onChange={() => setReadTerms(!readTerms)}
-                            id='readTerms'
-                            name='readTerms'
-                        />
-                        <label htmlFor='readTerms' className='ms-2 text-sm font-medium text-gray-900'>
-                            I agree with the terms I have read
-                        </label>
 
-                    </div>
-                    <div className='flex gap-1'>
-                        <input
-                            type="checkbox"
-                            checked={isBackUpNeedCheckboxEnabled}
-                            onChange={toggleBackupNeededCheckbox}
-                            id='isBackUpNeedCheckboxEnabled'
-                            name='isBackUpNeedCheckboxEnabled'
-                        />
-                        <label htmlFor='isBackUpNeedCheckboxEnabled' className='ms-2 text-sm font-medium text-gray-900'>
-                            Does your device require backup?(If no, leave unchecked)
-                        </label>
-
-                    </div>
-                </div>
 
                 {/* Consultant */}
 

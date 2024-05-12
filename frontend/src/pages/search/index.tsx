@@ -105,7 +105,8 @@ function SearchCustomer() {
             window.localStorage.setItem("custInfo", custInfoString);
             // console.log('Dummy object stored successfully!');
             createEntry();
-            router.push("/device_inspection")
+            // router.push("/device_inspection")
+            router.push("/assets")
         }
     }
     return (
@@ -117,7 +118,7 @@ function SearchCustomer() {
             <div className="flex flex-col justify-center items-center h-screen bg-white border w-30 border-sky-500">
                 <h4 className="text-3xl font-bold mb-2 text-center dark:text-gray-700">Search customer</h4>
                 <p className='tracking-tighter text-gray-500 md:text-lg dark:text-gray-400'>Email or phone number</p>
-                <div className="bg-white rounded-lg p-2">
+                <div className="">
                     <input
                         value={searchCustomer}
                         onChange={(e) => setSearchCustomer(e.target.value)}

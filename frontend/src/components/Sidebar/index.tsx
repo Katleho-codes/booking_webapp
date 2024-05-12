@@ -28,7 +28,7 @@ const Sidebar = () => {
 
     return (
         <>
-            <div className="p-2">
+            <nav className="p-2 navbar">
                 <button
                     role="button"
                     id="burger_menu"
@@ -46,7 +46,7 @@ const Sidebar = () => {
                         <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"></path>
                     </svg>
                 </button>
-            </div>
+            </nav>
 
             <aside
                 className={`sidebar ${isOpen === true ? "active" : ""
@@ -54,7 +54,7 @@ const Sidebar = () => {
             >
                 <div className="sd-header">
                     <Link
-                        className="logo overflow-hidden flex justify-center items-center flex-col p-1"
+                        className="logo overflow-hidden p-1"
                         href="/"
                     >
                         <Image
@@ -62,7 +62,7 @@ const Sidebar = () => {
                             alt="allelectronics logo"
                             priority={true}
                             placeholder="blur"
-                            style={{ objectFit: "cover" }}
+                            style={{ objectFit: "cover", width: "70%", height: "auto" }}
                         />
                     </Link>
                     <button
@@ -77,7 +77,7 @@ const Sidebar = () => {
                             width="24"
                             height="24"
                             viewBox="0 0 24 24"
-                            className="dark:fill-white"
+                            className="dark:fill-grey-600"
                         >
                             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
                             <path d="M0 0h24v24H0z" fill="none" />
@@ -86,7 +86,7 @@ const Sidebar = () => {
                 </div>
                 <div className="sd-body">
                     <button
-                        className={`open-submenu-btn  text-white font-semibold px-3 py-2 rounded-sm bg-[#082f49] w-full flex flex-row justify-between items-center`}
+                        className={`open-submenu-btn  text-white font-semibold px-3 py-2 rounded-md bg-[#082f49] w-full flex flex-row justify-between items-center`}
                         onClick={() => setSubMenuOpen(!subMenuOpen)}
                     >
                         <span>Tickets</span>

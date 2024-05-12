@@ -13,6 +13,7 @@ export const useFetchTickets = () => {
                     // console.log(res.data)
                     const filteredHHP = res.data?.filter((x: any) => x.department === "HHP")
                     const filteredDTVHA = res.data?.filter((x: any) => x.department === "DTV/HA")
+                    // console.log(filteredHHP)
                     setGetAllTicketsHHP(filteredHHP);
                     setGetAllTicketsDTV(filteredDTVHA);
                 })

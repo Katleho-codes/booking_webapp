@@ -51,9 +51,12 @@ const addEntry = async (req, res) => {
         customUUID,
       ]
     );
-    res.status(200).json(newEntry.rows);
+    res.status(200).json({
+      message: "Ticket created successfully",
+      data: newEntry.rows,
+    });
   } catch (error) {
-    console.log("Create entry error", error);
+    // console.log("Create entry error", error);
   }
 };
 export default addEntry;

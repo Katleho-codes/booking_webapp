@@ -6,7 +6,7 @@ const Pagination = (props: Itable) => {
         <div className="pagination flex gap-4 p-2">
             <button
                 role="button"
-                className="border rounded p-1 font-medium page-index-button hidden md:visible"
+                className="border rounded p-1 font-medium page-index-button hidden md:block"
                 onClick={() => props.table.setPageIndex(0)}
                 disabled={!props.table.getCanPreviousPage()}
             >
@@ -30,14 +30,14 @@ const Pagination = (props: Itable) => {
             </button>
             <button
                 role="button"
-                className="border rounded p-1 font-medium page-index-button hidden md:visible"
+                className="border rounded p-1 font-medium page-index-button hidden md:block"
                 onClick={() => props.table.setPageIndex(props.table.getPageCount() - 1)}
                 disabled={!props.table.getCanNextPage()}
             >
                 {">>"}
             </button>
             <span className="flex items-center gap-1 ">
-                <div className=" font-semibold text-[#0d0d0d]">
+                <div className=" font-semibold text-[#0d0d0d] text-sm hidden md:block">
                     Page
                 </div>
                 <strong>
@@ -45,7 +45,7 @@ const Pagination = (props: Itable) => {
                     {props.table.getPageCount()}
                 </strong>
             </span>
-            <span className="flex items-center gap-1 ">
+            <span className="flex items-center gap-1 text-sm font-medium text-slate-800">
                 | Go to page:
                 <label htmlFor="search-page-number" className="sr-only">
                     {" "}
@@ -70,7 +70,7 @@ const Pagination = (props: Itable) => {
                 id="showPageSize"
                 name="showPageSize"
                 value={props.table.getState().pagination.pageSize}
-                className="border  outline-none ring-0  font-medium cursor-pointerbg-gray-50 border-gray-300 text-gray-900  p-1 rounded"
+                className="border outline-none ring-0 font-medium cursor-pointer bg-gray-50 border-gray-300 text-gray-900 p-1 rounded text-sm"
                 onChange={(e) => {
                     props.table.setPageSize(Number(e.target.value));
                 }}

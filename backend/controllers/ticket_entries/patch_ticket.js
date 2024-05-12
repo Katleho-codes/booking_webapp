@@ -11,7 +11,7 @@ const patchEntry = async (req, res) => {
 
     res.status(201).json(editQuery.rows);
   } catch (error) {
-    console.log("update ticket error", error);
+    // console.log("update ticket error", error);
   }
 };
 export default patchEntry;

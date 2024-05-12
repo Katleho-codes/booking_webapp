@@ -196,5 +196,8 @@ CREATE TABLE tickets(
     business_name text,
     phone_number_2 text,
     customer_id text,
+    original_ticket_id text,
+    original_asset_id text,
+    original_customer_id,
     custom_uuid uuid
 );

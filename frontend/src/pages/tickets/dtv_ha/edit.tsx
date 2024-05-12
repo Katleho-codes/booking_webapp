@@ -1,18 +1,22 @@
 import Container from '@/components/Container';
 import { useRouter } from 'next/router';
 
+import TabsTwo from '@/components/TabsTwo';
+import TabPane from '@/components/TabsTwo/TabPane';
 import axios from 'axios';
 import moment from 'moment';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { useFetchTicketById } from '../../../../hooks/useFetch';
+import Fridges from '../units/fridges';
+import Microwaves from '../units/microwaves';
+import TV from '../units/tv';
 import { serviceTypes } from '../../../../utils/service_types';
-import Mobile from '../units/mobile';
 import Modal from '@/components/Modals';
-import { provinces } from '../../../../utils/provinces';
 import { asset_names } from '../../../../utils/asset_names';
+import { provinces } from '../../../../utils/provinces';
 
-function EditHHPTicket() {
+function EditDTVHATicket() {
     const [symptom1, setSymptom1] = useState("")
     const [symptom1Label, setSymptom1Label] = useState("")
     const [symptom2, setSymptom2] = useState("")
@@ -20,9 +24,9 @@ function EditHHPTicket() {
     const [symptom3, setSymptom3] = useState("")
     const [symptom3Label, setSymptom3Label] = useState("")
     const [purchaseDate, setPurchaseDate] = useState("")
-    const [accessory, setAccessory] = useState("")
     const modifiedPurchaseDate = moment(purchaseDate).format("YYYYMMDD");
     const [serviceType, setSetServiceType] = useState("")
+
 
     // Customer details modal
     const [customerDetailsModal, setCustomerDetailsModal] = useState(false);
@@ -69,7 +73,6 @@ function EditHHPTicket() {
         loadCustomer()
     }, [customer_address, customer_address_2, customer_email, customer_firstname, customer_lastname, customer_phone, customer_state, customer_zip, phone_number_2])
 
-
     useEffect(() => {
         const loadAssets = async () => {
             setEditModelNumber(model_number)
@@ -77,6 +80,8 @@ function EditHHPTicket() {
         }
         loadAssets()
     }, [model_number, serial_number])
+
+
     const updateCustomerOnOurDB = async () => {
         const values = {
             editCustomerFirstname,
@@ -132,6 +137,7 @@ function EditHHPTicket() {
         updateCustomeronRepairshpr()
     }
 
+
     const updateAssetsOnOurDB = async () => {
         const values = {
             editSerialNumber, editModelNumber
@@ -177,13 +183,10 @@ function EditHHPTicket() {
             // console.log(error)
         }
     }
-
     const updateAssetsBothSystems = () => {
         updateAssetsOnOurDB()
         updateAssetsonRepairshpr()
     }
-
-
 
 
 
@@ -209,18 +212,15 @@ function EditHHPTicket() {
         setSymptom3(e.target.value)
     }
 
-
-
     const patchServiceOrder = async () => {
         const values = { getServiceOrderNumber }
         try {
             const response = await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_LINK}/${id}`, values); // Replace with your API endpoint
-            return response?.data;
+            return response?.data
         } catch (error) {
             // console.error('Error updating data:', error);
         }
     }
-
     const createServiceOrder = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         const generateTimeStampForPacCode = moment(new Date(
@@ -261,9 +261,8 @@ function EditHHPTicket() {
             "IsModelInfo": {
                 "Model": `${model_number}`,
                 "SerialNo": `${serial_number}`,
-                "IMEI": `${imei}`,
                 "PurchaseDate": `${modifiedPurchaseDate === "Invalid date" ? "" : modifiedPurchaseDate}`,
-                "Accessory": `${accessory}`,
+                "Accessory": "",
                 "DefectDesc": `${unit_fault}`,
                 "Remark": "",
                 "WtyException": ""
@@ -308,10 +307,7 @@ function EditHHPTicket() {
                 Authorization: `Bearer ${process.env.NEXT_PUBLIC_IPAAS_TOKEN} `
             },
         }).then(function (response) {
-            // console.log("resp", response)
-
-            // check error and display it if exists errors
-            // no error, create so and show the so in question
+            // console.log(response)
 
             if (response?.data?.Return.EsCommonResult.Code !== '200') {
                 alert(response?.data?.EtErrInfo.results[0]?.ErrMsg)
@@ -320,17 +316,16 @@ function EditHHPTicket() {
                 setGetServiceOrderNumber(response?.data?.Return?.EvSvcOrderNo);
                 patchServiceOrder();
             }
-
         })
             .catch(function (error: any) {
-                // console.log("error", error)
+                // console.log(error)
             });
 
     }
 
-
-
     return (
+
+
         <>
             <Head>
                 <title>Edit ticket</title>
@@ -345,7 +340,7 @@ function EditHHPTicket() {
                         Back
                     </button>
 
-                    <h1 className="text-3xl font-extrabold leading-none tracking-tight text-gray-900 text-center">Edit HHP Ticket</h1>
+                    <h1 className="text-3xl font-extrabold leading-none tracking-tight text-gray-900 text-center">Edit DTV/HA Ticket</h1>
 
                     <div />
                 </span>
@@ -372,7 +367,7 @@ function EditHHPTicket() {
                             {/* <button onClick={() => setOpenAssetsModal(true)} type='button' className="rounded-md border-none shadow-sm px-4 py-2 bg-[#273e47] hover:bg-[#273e47bd] active:bg-[#273e47bd] focus:bg-[#273e47bd] text-sm font-medium text-white outline-none">Edit</button> */}
                             <div />
                         </div>
-                        <p className='text-gray-900 font-semibold text-sm my-2'><small className='font-normal text-gray-500 text-xs'>Ticket no:</small> {ticket_number}</p>
+                        <p className='text-gray-900 font-semibold text-sm my-2 '><small className='font-normal text-gray-500 text-xs'>Ticket no:</small> {ticket_number}</p>
                         <p className='text-gray-900 font-semibold text-sm my-2'><small className='font-normal text-gray-500 text-xs'>Service order no:</small> {service_order_number}</p>
                         <p className='text-gray-900 font-semibold text-sm my-2'><small className='font-normal text-gray-500 text-xs'>Fault:</small> {unit_fault}</p>
                         <p className='text-gray-900 font-semibold text-sm my-2'><small className='font-normal text-gray-500 text-xs'>How often:</small> {fault_occurence}</p>
@@ -384,48 +379,103 @@ function EditHHPTicket() {
                         <p className='text-gray-900 font-semibold text-sm my-2'><small className='font-normal text-gray-500 text-xs'>Warranty:</small> {warranty_period}</p>
                         <p className='text-gray-900 font-semibold text-sm my-2'><small className='font-normal text-gray-500 text-xs'>Created:</small> {created_date}</p>
                         <p className='text-gray-900 font-semibold text-sm my-2'><small className='font-normal text-gray-500 text-xs'>Department:</small> {department}</p>
-
-                        <div>
-                            <span className="my-4">
-                                <label htmlFor="purchaseDate" className='mb-2 text-sm font-medium text-gray-800 tracking-normal'>Select purchase date if it exists</label>
-                                <input value={purchaseDate} onChange={(e) => {
-                                    setPurchaseDate(e.target.value)
-                                }} type="date" name="purchaseDate" placeholder='Purchase date' id="purchaseDate" className="cursor-pointer mb-2 bg-white outline-none border border-gray-300 outline-0 text-gray-900  font-semibold text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-1 px-2.5" />
-                            </span>
-                            <p className='my-2 text-sm font-medium text-blue-800 tracking-normal'>Please ensure all the fields below this are filled</p>
-                            <span className="my-4">
-                                <input value={accessory} onChange={(e) => {
-                                    setAccessory(e.target.value)
-                                }} placeholder="Accessories" type="text" name="accessory" id="accessory" className="mb-2 bg-white outline-none border border-gray-300 outline-0 text-gray-900  font-semibold text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full  py-1 px-2.5" />
-                            </span>
-                            <div className="my-4">
-                                <select
-                                    // required
-                                    // aria-required
-                                    name='serviceType'
-                                    id="serviceType"
-                                    value={serviceType} onChange={(e) => setSetServiceType(e.target.value)}
-                                    className="cursor-pointer mb-2 bg-white outline-none border border-gray-300 outline-0 text-gray-900  font-semibold text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full  py-1 px-2.5"
-                                >
-                                    <option disabled value="">
-                                        Choose service type
-                                    </option>
-                                    {serviceTypes.map((x) => (
-                                        <option key={x._value} value={`${x._value}`}>
-                                            {x?._name}
+                        <TabsTwo>
+                            <TabPane title="Fridge">
+                                <span className="my-4">
+                                    <label htmlFor="purchaseDate" className='mb-2 text-sm font-medium text-gray-800 tracking-normal'>Select purchase date if it exists</label>
+                                    <input value={purchaseDate} onChange={(e) => {
+                                        setPurchaseDate(e.target.value)
+                                    }} type="date" name="purchaseDate" placeholder='Purchase date' id="purchaseDate" className="cursor-pointer mb-2 bg-white outline-none border border-gray-300 outline-0 text-gray-900  font-semibold text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-1 px-2.5" />
+                                </span>
+                                <div className="my-4">
+                                    <select
+                                        // required
+                                        // aria-required
+                                        name='serviceType'
+                                        id="serviceType"
+                                        value={serviceType} onChange={(e) => setSetServiceType(e.target.value)}
+                                        className="cursor-pointer mb-2 bg-white outline-none border border-gray-300 outline-0 text-gray-900  font-semibold text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full  py-1 px-2.5"
+                                    >
+                                        <option disabled value="">
+                                            Choose service type
                                         </option>
-                                    ))}
-                                </select>
+                                        {serviceTypes.map((x) => (
+                                            <option key={x._value} value={`${x._value}`}>
+                                                {x?._name}
+                                            </option>
+                                        ))}
+                                    </select>
 
-                            </div>
-                            <Mobile symptom1={symptom1} onChangeSymp1={onChangeSymp1} symptom2={symptom2} onChangeSymp2={onChangeSymp2} symptom2Label={symptom2Label} symptom3={symptom3} onChangeSymp3={onChangeSymp3} />
+                                </div>
+                                <p className='my-2 text-sm font-medium text-blue-800 tracking-normal'>Please ensure all the fields below this are filled</p>
+                                <Fridges symptom1={symptom1} onChangeSymp1={onChangeSymp1} symptom2={symptom2} onChangeSymp2={onChangeSymp2} symptom2Label={symptom2Label} symptom3={symptom3} onChangeSymp3={onChangeSymp3} />
+                            </TabPane>
+                            <TabPane title="Microwave">
+                                <span className="my-4">
+                                    <label htmlFor="purchaseDate" className='mb-2 text-sm font-medium text-gray-800 tracking-normal'>Select purchase date if it exists</label>
+                                    <input value={purchaseDate} onChange={(e) => {
+                                        setPurchaseDate(e.target.value)
+                                    }} type="date" name="purchaseDate" placeholder='Purchase date' id="purchaseDate" className="cursor-pointer mb-2 bg-white outline-none border border-gray-300 outline-0 text-gray-900  font-semibold text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-1 px-2.5" />
+                                </span>
+                                <div className="my-4">
+                                    <select
+                                        // required
+                                        // aria-required
+                                        name='serviceType'
+                                        id="serviceType"
+                                        value={serviceType} onChange={(e) => setSetServiceType(e.target.value)}
+                                        className="cursor-pointer mb-2 bg-white outline-none border border-gray-300 outline-0 text-gray-900  font-semibold text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full  py-1 px-2.5"
+                                    >
+                                        <option disabled value="">
+                                            Choose service type
+                                        </option>
+                                        {serviceTypes.map((x) => (
+                                            <option key={x._value} value={`${x._value}`}>
+                                                {x?._name}
+                                            </option>
+                                        ))}
+                                    </select>
 
-                            <button type="button" onClick={createServiceOrder} className="rounded-md border-none shadow-sm px-4 py-2 bg-[#273e47] hover:bg-[#273e47bd] active:bg-[#273e47bd] focus:bg-[#273e47bd] text-sm font-medium text-white outline-none">Create service order</button>
-                        </div>
+                                </div>
+                                <p className='my-2 text-sm font-medium text-blue-800 tracking-normal'>Please ensure all the fields below this are filled</p>
+                                <Microwaves symptom1={symptom1} onChangeSymp1={onChangeSymp1} symptom2={symptom2} onChangeSymp2={onChangeSymp2} symptom2Label={symptom2Label} symptom3={symptom3} onChangeSymp3={onChangeSymp3} />
+                            </TabPane>
+                            <TabPane title="TV">
+                                <span className="my-4">
+                                    <label htmlFor="purchaseDate" className='mb-2 text-sm font-medium text-gray-800 tracking-normal'>Select purchase date if it exists</label>
+                                    <input value={purchaseDate} onChange={(e) => {
+                                        setPurchaseDate(e.target.value)
+                                    }} type="date" name="purchaseDate" placeholder='Purchase date' id="purchaseDate" className="cursor-pointer mb-2 bg-white outline-none border border-gray-300 outline-0 text-gray-900  font-semibold text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-1 px-2.5" />
+                                </span>
+                                <div className="my-4">
+                                    <select
+                                        // required
+                                        // aria-required
+                                        name='serviceType'
+                                        id="serviceType"
+                                        value={serviceType} onChange={(e) => setSetServiceType(e.target.value)}
+                                        className="cursor-pointer mb-2 bg-white outline-none border border-gray-300 outline-0 text-gray-900  font-semibold text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full  py-1 px-2.5"
+                                    >
+                                        <option disabled value="">
+                                            Choose service type
+                                        </option>
+                                        {serviceTypes.map((x) => (
+                                            <option key={x._value} value={`${x._value}`}>
+                                                {x?._name}
+                                            </option>
+                                        ))}
+                                    </select>
 
+                                </div>
+                                <p className='my-2 text-sm font-medium text-blue-800 tracking-normal'>Please ensure all the fields below this are filled</p>
+                                <TV symptom1={symptom1} onChangeSymp1={onChangeSymp1} symptom2={symptom2} onChangeSymp2={onChangeSymp2} symptom2Label={symptom2Label} symptom3={symptom3} onChangeSymp3={onChangeSymp3} />
+                            </TabPane>
+                        </TabsTwo>
+                        <button type="button" onClick={createServiceOrder} className=" rounded-md border-none shadow-sm px-4 py-2 bg-[#273e47] hover:bg-[#273e47bd] active:bg-[#273e47bd] focus:bg-[#273e47bd] text-sm font-medium text-white outline-none">Create service order</button>
                     </article>
-                </div >
-            </Container >
+
+                </div>
+            </Container>
 
             <Modal
                 title={"Edit customer details"}
@@ -542,4 +592,4 @@ function EditHHPTicket() {
     )
 }
 
-export default EditHHPTicket
+export default EditDTVHATicket;
