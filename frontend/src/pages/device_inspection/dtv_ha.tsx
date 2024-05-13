@@ -242,7 +242,7 @@ function DTVHA() {
             }
         })
             .then((res) => {
-                console.log("result from ticket", res)
+                // console.log("result from ticket", res)
                 let ticketNumber = res?.data?.ticket?.number;
                 let originalTicketId = res?.data?.ticket?.id;
                 let customerId = res?.data?.ticket?.customer_id;

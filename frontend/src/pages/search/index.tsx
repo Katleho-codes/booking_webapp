@@ -159,10 +159,10 @@ function SearchCustomer() {
                         ) : null
                     }
 
-                    {searchCustomer === result[0]?.email || searchCustomer === result[0]?.phone || searchCustomer === result[0]?.phone ?
+                    {searchCustomer === result[0]?.email || searchCustomer === result[0]?.phone || searchCustomer === result[0]?.mobile ?
                         <button type='button' onClick={addExistingCustomer} className='text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2'>Add customer</button> : null}
 
-                    {searchCustomer === result[0]?.email || searchCustomer === result[0]?.phone || searchCustomer === result[0]?.phone ? null :
+                    {searchCustomer === result[0]?.email || searchCustomer === result[0]?.phone || searchCustomer === result[0]?.mobile ? null :
                         <div>
                             <small className="block text-gray-500 text-center">Cannot find customer?</small>
                             <Link href="/booking_form" className='text-center font-medium text-blue-600'>Create customer</Link>

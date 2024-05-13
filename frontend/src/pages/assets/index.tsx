@@ -61,6 +61,8 @@ function Assets() {
         const custAssetString = JSON.stringify(assetInfo);
         if (typeof window !== "undefined" && window.localStorage) {
             window.localStorage.setItem("assetInfo", custAssetString);
+            alert(`Assets created, Continue`);
+            router.push("/device_inspection")
             // console.log('Dummy object stored successfully!');
         }
     }
@@ -71,11 +73,14 @@ function Assets() {
             "model_number": createModel
         }
         // console.log(assetInfo)
+
         const custAssetString = JSON.stringify(assetInfo);
         if (typeof window !== "undefined" && window.localStorage) {
             window.localStorage.setItem("assetInfo", custAssetString);
+
             // console.log('Dummy object stored successfully!');
         }
+
     }
 
     const storeCreatedAssetsToRepairshpr = async () => {
