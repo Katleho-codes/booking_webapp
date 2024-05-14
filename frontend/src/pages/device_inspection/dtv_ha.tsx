@@ -261,7 +261,7 @@ function DTVHA() {
 
 
     return (
-        <Container>
+        <>
 
             <h3 className='font-medium text-center mb-3 text-gray-900'>Customer section</h3>
             <form onSubmit={createTicket}>
@@ -375,7 +375,7 @@ function DTVHA() {
                 </button>
             </form>
 
-        </Container>
+        </>
     )
 }
 

@@ -5,7 +5,7 @@ type TContainer = {
 }
 function Container({ children }: TContainer) {
     return (
-        <div className='mx-auto container p-2'>
+        <div className='w-[90%] mx-auto p-2'>
             {children}
         </div>
     )

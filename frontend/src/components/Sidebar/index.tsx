@@ -9,8 +9,26 @@ import { useState } from "react";
 
 import logo from "../../../public/mmlogo.png";
 import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button"
 
+import { Bars2Icon } from "@heroicons/react/24/outline";
 
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 
 
@@ -28,7 +46,7 @@ const Sidebar = () => {
 
     return (
         <>
-            <nav className="p-2 navbar">
+            {/* <nav className="p-2 navbar">
                 <button
                     role="button"
                     id="burger_menu"
@@ -129,7 +147,77 @@ const Sidebar = () => {
             <div
                 className={`sidebar-overlay ${isOpen === true ? "active" : ""}`}
                 onClick={ToggleSidebar}
-            ></div>
+            ></div> */}
+
+            <Sheet>
+                <SheetTrigger>
+                    <div className="p-2">
+                        <Bars2Icon className="h-6 w-6" />
+                    </div>
+                </SheetTrigger>
+                <SheetContent side={"left"} className="w-[300px]">
+                    <SheetHeader>
+                        <SheetTitle><Link
+                            className="logo overflow-hidden"
+                            href="/"
+                        >
+                            <Image
+                                src={logo}
+                                alt="allelectronics logo"
+                                priority={true}
+                                placeholder="blur"
+                                style={{ objectFit: "cover", width: "30%", height: "auto" }}
+                            />
+                        </Link></SheetTitle>
+
+                    </SheetHeader>
+                    <div className="mt-5 flex flex-col gap-3">
+                        <button
+                            className={`open-submenu-btn  text-white font-semibold px-3 py-2 rounded-md bg-[#082f49] w-full flex flex-row justify-between items-center`}
+                            onClick={() => setSubMenuOpen(!subMenuOpen)}
+                        >
+                            <span>Tickets</span>
+                            <span>
+                                {!subMenuOpen ? (
+                                    <ChevronDownIcon className="h-6 w-6 text-white" />
+                                ) : (
+                                    <ChevronUpIcon className="h-6 w-6 text-white " />
+                                )}
+                            </span>
+                        </button>
+                        {subMenuOpen && (
+                            <ul className="">
+                                <li>
+                                    <Link
+                                        href={"/tickets/hhp"}
+                                        className={`sd-link`}
+                                    >
+                                        HHP
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href={"/tickets/dtv_ha"}
+                                        className={`sd-link`}
+                                    >
+                                        DTV/HA
+                                    </Link>
+                                </li>
+                            </ul>
+                        )}
+
+
+
+
+                    </div>
+
+
+                </SheetContent>
+
+
+
+            </Sheet>
+
         </>
     );
 };

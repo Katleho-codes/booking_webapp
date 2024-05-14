@@ -169,7 +169,7 @@ function CustomerDetails() {
             </Head>
 
 
-            <div className="container mx-auto p-2">
+            <div className="w-[90%] mx-auto p-2">
                 <Image
                     className='mx-auto py-3'
                     src={"/mmlogo.png"}
@@ -179,7 +179,7 @@ function CustomerDetails() {
                     priority={true}
                 />
 
-                <h1 className="my-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 text-center underline underline-offset-5 decoration-5 decoration-blue-400">Create customer</h1>
+                <h1 className="my-4 text-3xl antialiased font-extrabold leading-none tracking-tight text-gray-900 text-center underline underline-offset-5 decoration-5 decoration-blue-400">Create customer</h1>
 
                 <form onSubmit={createCustomer}>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -265,7 +265,7 @@ function CustomerDetails() {
                         </div>
                     </div>
 
-                    <button type="submit" className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 me-2 mb-2">
+                    <button type="submit" className="items-center gap-2 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-centerfocus:ring-gray-600 bg-gray-800 border-gray-700 text-white hover:bg-gray-700 me-2 mb-2">
                         Create customer
                     </button>
 
