@@ -4,11 +4,14 @@ import axios from 'axios';
 import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import toast from "react-hot-toast";
 import { assetTypesHHP } from '../../../utils/asset_types';
 import { datetimestamp } from '../../../utils/datetime';
 import { faultOccurences } from '../../../utils/fault_occurences';
+import SignatureCanvas from 'react-signature-canvas';
+import Modal from '@/components/Modals';
+import Image from 'next/image';
 
 function HHP() {
     const [isBackUpNeedCheckboxEnabled, setIsBackUpNeedCheckboxEnabled] = useState(false)
@@ -29,6 +32,8 @@ function HHP() {
 
     const [storedData, setStoredData] = useState({})
 
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
     const [customUUID, setCustomUUID] = useState<string | null | any>("")
     const [email, setEmail] = useState<string | null | any>("")
     const [phoneNumber, setPhoneNumber] = useState<string | null | any>("")
@@ -45,6 +50,9 @@ function HHP() {
     const [warranty, setWarranty] = useState("");
 
     const [readTerms, setReadTerms] = useState(false);
+
+    const [openModal, setOpenModal] = useState(false);
+    const [pattern, setPattern] = useState(null)
     const router = useRouter()
 
 
@@ -69,6 +77,8 @@ function HHP() {
 
                     setStoredData(parsedData); // Set the parsed object to st
                     // console.log(info);
+                    setFirstName(parsedData?.firstname)
+                    setLastName(parsedData?.lastname)
                     setEmail(parsedData?.email);
                     setCustomUUID(parsedData?.customUUID);
                     setPhoneNumber(parsedData?.phoneNumber);
@@ -270,6 +280,26 @@ function HHP() {
 
     }
 
+    const sigCanvas = useRef<SignatureCanvas | any>(null);
+
+    const clear = () => {
+        sigCanvas.current?.clear();
+    };
+
+    const save = () => {
+        if (sigCanvas.current?.isEmpty()) {
+            alert("Please provide a signature first.");
+        } else {
+            const dataUrl = sigCanvas?.current.getTrimmedCanvas().toDataURL("image/png");
+            setPattern(dataUrl)
+            const a = document.createElement("a")
+            a.download = `${firstName}_${lastName}_${email}.png`;
+            a.href = dataUrl;
+            a.click()
+            setOpenModal(false)
+            // You can also set this data URL to state or send it to your server
+        }
+    };
     return (
         <Container>
 
@@ -301,9 +331,12 @@ function HHP() {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 justify-between items-center">
-                    <div className="mb-4">
-                        <label htmlFor='password' className='sr-only'>Password or pin</label>
-                        <input type="text" name='password' id='password' placeholder='Password or pin' value={password} onChange={(e) => setPassword(e.target.value)} className=" bg-white border border-gray-300 outline-0 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                    <div className="mb-4 flex flex-row items-center gap-2">
+                        <div className='basis-10/12'>
+                            <label htmlFor='password' className='sr-only'>Password or pin</label>
+                            <input type="text" name='password' id='password' placeholder='Password or pin' value={password} onChange={(e) => setPassword(e.target.value)} className=" bg-white border border-gray-300 outline-0 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" />
+                        </div>
+                        <button type="button" className='basis-1/5 font-medium rounded-sm text-sm px-4 py-2.5 bg-gray-800 border-gray-700 text-white hover:bg-gray-700' onClick={() => setOpenModal(true)}>Pattern</button>
                     </div>
                     <div className='mb-4'>
                         <div className='flex gap-1'>
@@ -333,6 +366,13 @@ function HHP() {
 
                         </div>
                     </div>
+                    {pattern ? <Image
+                        alt='Pattern'
+                        src={pattern}
+                        height={200}
+                        width={200}
+
+                    /> : null}
                 </div>
 
 
@@ -398,6 +438,42 @@ function HHP() {
                     <ArrowLongRightIcon className="h-4 w-4 text-white" />
                 </button>
             </form>
+
+            <Modal
+                isVisible={openModal}
+                title={"Draw pattern"}
+                content={<>
+
+                    <div className="flex flex-col items-center justify-center">
+                        <p className="mb-4">Password pattern</p>
+
+                        <SignatureCanvas
+                            penColor="black"
+                            canvasProps={{ className: "border border-gray-300 w-full md:w-[300px] h-64 canvas_bg_image" }}
+                            ref={sigCanvas}
+                        />
+                        <div className="mt-4">
+                            <button
+                                type="button"
+                                onClick={clear}
+                                className="bg-red-500 text-white py-2 px-4 rounded mr-2"
+                            >
+                                Clear
+                            </button>
+                            <button
+                                type="button"
+                                onClick={save}
+                                className="bg-blue-500 text-white py-2 px-4 rounded"
+                            >
+                                Save
+                            </button>
+                        </div>
+                    </div>
+
+                </>}
+                onClose={() => setOpenModal(false)}
+
+            />
 
         </Container>
     )

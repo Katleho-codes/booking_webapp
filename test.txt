@@ -1,0 +1,72 @@
+// src/components/FileUpload.tsx
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const Test: React.FC = () => {
+    const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
+    const [uploading, setUploading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 8) {
+            setError('You can only upload up to 8 images at a time.');
+            setSelectedFiles(null);
+        } else {
+            setError(null);
+            setSelectedFiles(e.target.files);
+        }
+    };
+
+    const handleUpload = async () => {
+        if (!selectedFiles || selectedFiles.length === 0) {
+            setError('Please select files to upload.');
+            return;
+        }
+
+        const filesArray = Array.from(selectedFiles).map((file, index) => ({
+            url: URL.createObjectURL(file),  // This assumes you have a way to generate URLs for the files.
+            filename: file.name,
+        }));
+
+        try {
+            setUploading(true);
+            setError(null);
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_REPAIRSHOPR_API_SUBDOMAIN}/tickets/81487398/attach_file_url`, { files: filesArray }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${process.env.NEXT_PUBLIC_REPAIRSHOPR_BEARER_TOKEN}`
+                },
+            });
+            console.log('Upload success:', response.data);
+        } catch (err) {
+            console.error('Upload error:', err);
+            setError('Failed to upload images.');
+        } finally {
+            setUploading(false);
+        }
+    };
+
+
+    return (
+        <div className="file-upload">
+            <h1 className="text-2xl mb-4">Upload Images</h1>
+            <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleFileChange}
+                className="mb-4"
+            />
+            {error && <p className="text-red-500">{error}</p>}
+            <button
+                onClick={handleUpload}
+                disabled={uploading}
+                className="bg-blue-500 text-white py-2 px-4 rounded disabled:opacity-50"
+            >
+                {uploading ? 'Uploading...' : 'Upload'}
+            </button>
+        </div>
+    );
+};
+
+export default Test;

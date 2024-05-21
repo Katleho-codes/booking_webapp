@@ -33,7 +33,7 @@ function Home() {
           />
           <p className="text-center my-0 text-gray-500 font-medium">Customer service</p>
         </div>
-        <h1 className="text-center text-3xl font-extrabold leading-none tracking-tight text-gray-900 underline underline-offset-8 decoration-5 decoration-blue-400 dark:decoration-blue-600">MM ALL ELECTRONICS</h1>
+        <h1 className="text-center text-3xl font-extrabold leading-none tracking-tight text-gray-900 underline underline-offset-9 decoration-5 decoration-blue-400 dark:decoration-blue-600 mb-4">MM ALL ELECTRONICS</h1>
         <button onClick={onClick} type="button" className="flex text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br font-medium rounded-lg text-sm px-5 py-2.5 text-center">Start process</button>
       </main>
 
