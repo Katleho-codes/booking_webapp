@@ -322,6 +322,9 @@ function DTVHA() {
                 <div>
                     <h2 className='font-medium text-center  text-gray-900'>Consultant section</h2>
                     <p className='text-gray-500 text-center mb-3'>Please allow consulant to fill in this section</p>
+                    <Link href="https://terms.mmallonthemove.co.za/draw" target='_blank' className='font-medium rounded-sm text-sm px-4 py-2.5 bg-gray-800 border-gray-700 text-white hover:bg-gray-700 mb-5'>Click here for unit scratches and dents</Link>
+
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <div className="mb-4">
                             <label htmlFor='model' className='sr-only'>Model</label>

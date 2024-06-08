@@ -45,7 +45,7 @@ function SearchCustomer() {
                     },
                 })
                 // console.log(data)
-                if (data?.customers[0]?.email || data?.customer[0]?.phone === searchCustomer) {
+                if (data?.customers[0]?.email || data?.customer[0]?.phone || data?.customer[0]?.mobile === searchCustomer) {
                     setResult(data?.customers)
                     setCustomerId(data?.customers[0]?.id)
                     setFirstname(data?.customers[0]?.firstname)
@@ -115,7 +115,7 @@ function SearchCustomer() {
             <Head>
                 <title>Search customer | MM ALL ELECTRONICS</title>
             </Head>
-            <div className="flex flex-col justify-center items-center h-screen bg-white border w-30 border-sky-500">
+            <div className="flex flex-col justify-center items-center h-screen bg-white border w-30">
                 <h4 className="text-3xl font-bold mb-2 text-center dark:text-gray-700">Search customer</h4>
                 <p className='tracking-tighter text-gray-500 md:text-lg dark:text-gray-400'>Email or phone number</p>
                 <div className="">
